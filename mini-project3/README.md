@@ -1,7 +1,16 @@
-# Webcam Transformation Application
+# Mini-Project3: Webcam Transformation
 
-**Group Member** Yichi Zhang, Yiling Hu, Ziyang Liang, Derek Zhang
+###  Project Group 4
 
+- Derek Zhang
+- Yichi Zhang
+- Yiling Hu
+- Ziyang Liang
+
+
+## Project Description
+
+This group project implements a video capture application using OpenCV. It allows real-time image warping effects such as **translation**, **rotation**, **scaling**, and **perspective transformation**. The user can switch between effects using keyboard controls, and the frame rate is calculated to ensure smooth performance.
 This application is a simple webcam-based tool that allows users to apply real-time transformations such as translation, rotation, scaling, and perspective to the video feed from their webcam. The app is built using OpenCV and Python.
 
 ## Features
@@ -20,14 +29,35 @@ This application is a simple webcam-based tool that allows users to apply real-t
 - **Original and Transformed Views**: The application shows both the original frame and the transformed frame side by side.
 - **FPS Display**: The frames per second (FPS) is displayed on both the original and transformed frames.
 
-## How to Use
 
-1. You can switch between transformation modes by pressing the following keys:
-   - `t`: Apply/Cancel translation to the frame.
-   - `r`: Apply/Cancel rotation to the frame.
-   - `s`: Apply/Cancel scaling to the frame.
-   - `p`: Apply/Cancel perspective transformation.
-   - `q`: Quit the application.
+## Setup Instructions
 
-2. Both the original and transformed video frames will be displayed side by side.
+1. **Install Dependencies:**
+    - You need Python 3.x and OpenCV.
+    - Install OpenCV via pip:
+        
+        ```bash
+        pip3 install opencv-python
+        ```
+        
+2. **Running the Application:**
+    - Run the script with:
+        
+        ```bash
+        python WebCam2.py
+        ```
 
+## Usage Guide
+
+- The application captures video from your webcam and allows you to apply different warping effects in real time.
+- **Controls:**
+    - Press `t` to apply/cancel translation.
+    - Press `r` to apply/cancel rotation.
+    - Press `s` to apply/cancel scaling.
+    - Press `p` to apply/cancel perspective transformation.
+    - Press `q` to quit the application.
+
+
+### Demonstrating Video
+
+url:
