@@ -1,44 +1,33 @@
-# CS5330_F24_Group4
+# Group Projects - CS5330 2024Fall Group 4
 
-### Group Members — Project Group 4
+Welcome to the repository for our group projects this semester. This repository contains all the code, documentation, and resources for the projects we are working on together.
+
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Team Members](#team-members)
+- [Project List](#project-list)
+
+---
+
+## Project Overview
+
+This repository hosts multiple projects developed as part of our coursework for the Fall Semester 2024. Each project has its own directory and includes the necessary documentation to explain its purpose, functionality, and setup instructions.
+
+## Team Members
+
+We are a group of dedicated students working together on these projects. Here is our awesome team:
 
 - Derek Zhang
 - Yichi Zhang
 - Yiling Hu
 - Ziyang Liang
 
-### Setup Instructions
 
-1. **Install Dependencies:**
-    - You need Python 3.x and OpenCV.
-    - Install OpenCV via pip:
-        
-        ```bash
-        pip3 install opencv-python
-        ```
-        
-2. **Running the Application:**
-    - Run the script with:
-        
-        ```bash
-        python WebCam2.py
-        ```
-        
+## Project List
 
-### Usage Guide
+Below is a list of the projects in this repository. Each project has its own directory with detailed instructions.
 
-- The application captures video from your webcam and allows you to apply different warping effects in real time.
-- **Controls:**
-    - Press `t` to apply translation.
-    - Press `r` to apply rotation.
-    - Press `s` to apply scaling.
-    - Press `p` to apply perspective transformation.
-    - Press `q` to quit the application.
+1. **Project 1:** Mini-Project3: Webcam Transformation
 
-### Project Description
-
-This group project implements a video capture application using OpenCV. It allows real-time image warping effects such as **translation**, **rotation**, **scaling**, and **perspective transformation**. The user can switch between effects using keyboard controls, and the frame rate is calculated to ensure smooth performance.
-
-### Demonstrating Video
-
-url:
+> Navigate to each project's directory for more detailed documentation.
