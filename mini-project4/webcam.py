@@ -19,6 +19,9 @@ height2 = int(cap2.get(cv2.CAP_PROP_FRAME_HEIGHT))
 target_width = max(width1, width2)
 target_height = max(height1, height2)
 
+orb = cv2.ORB_create()
+apply_orb = False
+
 while True:
     # Capture frame-by-frame from the first camera
     ret1, frame1 = cap1.read()
@@ -36,15 +39,28 @@ while True:
     # Ensure both frames are of the same data type
     # if frame1.dtype != frame2.dtype:
     #     frame2 = frame2.astype(frame1.dtype)
-
+    
     # Stack the frames from both cameras horizontally
     combined = cv2.hconcat([frame1, frame2])
+
+    # ORB
+    if apply_orb:
+        gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+        gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
+        combined_gray = cv2.hconcat([gray1, gray2])
+    
+        keypoints, descriptors = orb.detectAndCompute(combined_gray, None)
+        combined = cv2.drawKeypoints(combined, keypoints, None, color=(0, 0, 255), flags=cv2.DrawMatchesFlags_DEFAULT)
+
 
     # Display the resulting frames
     cv2.imshow('Camera 1 and Camera 2', combined)
 
     # Break the loop on 'q' key press
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    key = cv2.waitKey(1) & 0xFF
+    if key == ord('o'):
+        apply_orb = not apply_orb
+    if key == ord('q'):
         break
 
 # Release the cameras and close all OpenCV windows
