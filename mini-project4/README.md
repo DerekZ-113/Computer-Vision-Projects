@@ -37,16 +37,17 @@ This project implements **ORB** (Oriented FAST and Rotated BRIEF), a fast and ef
         ```bash
         python webcam.py
         ```
+3. **Move the testing camera to see the matching result**
 
 ## Usage Guide
 
 - **Ensure your computer has two connected cameras**, as the project requires video input from two camera feeds (it can be one internal and 
 one external camera). Once the script runs, the live feed from both cameras will appear, showing matched feature points between the two frames in real time, along with their matching scores and the FPS rate.
-- **Controls:**
+- **Corols:**
     - Press `q` to quit the application.
 
 ### Demonstrating Video
 
 url: 
-- Sample video (1MB) []()
-- Demonstrating video []()
+- Sample videos (1MB) attached in the mini-project4 Directory
+- Demonstrating video [https://youtu.be/SOEiYZ-yjBM]()
