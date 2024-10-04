@@ -9,7 +9,7 @@
 
 ## Project Description
 
-This project implements a **Panorama Creator** using **ORB** (Oriented FAST and Rotated BRIEF) to detect and match features between captured frames from a webcam. The project captures a series of images as the user moves the camera horizontally, detects features within these images, matches these features across frames, and stitches the images together to create a seamless panorama. Additionally, it displays the Frames Per Second (FPS) for performance evaluation and allows users to save the generated panorama image.
+This project implements a **Panorama Creator** using **ORB** (Oriented FAST and Rotated BRIEF) to detect and match features between captured frames from a webcam. The project captures a series of images as the user **moves the camera horizontally**, detects features within these images, matches these features across frames, and stitches the images together to create a seamless panorama. Additionally, it displays the Frames Per Second (FPS) for performance evaluation and allows users to save the generated panorama image.
 
 ## Features
 
@@ -47,7 +47,13 @@ This project implements a **Panorama Creator** using **ORB** (Oriented FAST and 
 
 ## Code Overview
 
--
+- **`calculate_fps`**: Calculates the frames per second (FPS) over a specified time interval for performance monitoring. Displays the FPS rate on the live video feed.
+- **`stitch_images`**: Uses ORB (Oriented FAST and Rotated BRIEF) for feature detection and the BFMatcher to find feature matches between frames. This function calculates the homography matrix using RANSAC to align consecutive frames and stitches them together, creating a panorama. A width limit prevents errors from large image sizes.
+- **`save_panorama`**: Displays the stitched panorama and saves it as an image file (`panorama.jpg`) if the stitching process is successful.
+- **`main`**:
+  - Initializes the webcam and captures frames on the press of the `s` key.
+  - Stop capturing frames when the `a` key is pressed.
+  - On pressing `a`, the script initiates the stitching process, displays the panorama, and allows the user to save the result.
 
 ### Demonstrating Video
 
