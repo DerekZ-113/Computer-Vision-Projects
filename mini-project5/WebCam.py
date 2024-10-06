@@ -6,6 +6,24 @@ import matplotlib.pyplot as plt
 
 # Calculate FPS averaged over the given time interval (default: 1 second).
 def calculate_fps(frame_count, prev_time, interval=1.0):
+    '''
+    Args:
+    - frame_count: current count of processed frames
+    - prev_time: the last time the FPS calculation was done
+    - interval: the time interval over which the FPS is calculated (default is 1 second)
+
+    This function computes the frames per second (FPS) over a given time interval.
+    It tracks how many frames have been processed and the time that has passed.
+
+    By checking the elapsed time between the previous time and current time,
+    the function calculates the FPS if the interval has passed and resets the frame count and previous time.
+    If the interval hasn't passed, it returns None and waits for the next frame.
+
+    Returns:
+    - fps: the calculated frames per second
+    - prev_time: the updated previous time
+    - frame_count: reset or updated frame count
+    '''
     current_time = time.time()
     elapsed_time = current_time - prev_time
 
@@ -19,6 +37,20 @@ def calculate_fps(frame_count, prev_time, interval=1.0):
 
 # Image stitching to create the panorama
 def stitch_images(frames, max_width=8000):
+    '''
+    Args:
+    - frames: list of frames captured from the webcam
+    - max_width: the maximum allowed width for the stitched image (default is 8000 pixels)
+
+    This function stitches multiple frames into a single panorama using ORB for feature detection
+    and BFMatcher for feature matching. It aligns consecutive frames and combines them into one wide image.
+
+    ORB keypoints and descriptors are computed for each frame. BFMatcher matches keypoints between frames,
+    and homography is used to align the frames. The frames are then warped and combined to create the panorama.
+
+    Returns:
+    - stitched_image: the final stitched panorama
+    '''
     stitched_image = frames[0]
     orb = cv2.ORB_create()
     bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)
@@ -56,7 +88,17 @@ def stitch_images(frames, max_width=8000):
     return stitched_image
 
 # Save panorama to disk
+
 def save_panorama(panorama):
+    '''
+    Args:
+    - panorama: the stitched image that will be saved
+
+    This function saves the generated panorama to disk and displays it using OpenCV.
+
+    Returns:
+    None
+    '''
     if panorama is not None:
         cv2.imshow("Panorama", panorama)
         save_path = "panorama.jpg"
