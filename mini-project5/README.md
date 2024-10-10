@@ -57,5 +57,5 @@ This project implements a **Panorama Creator** using **ORB** (Oriented FAST and 
 
 ### Demonstrating Video
 
-- Sample video (1MB):
-- Demonstrating video:
+- Sample video (1MB): sample_video1.mp4 in project folder
+- Demonstrating video: https://drive.google.com/file/d/12XjrylNMOLbzikOrA2vOi8iOcvGxn3E6/view?usp=drive_link
