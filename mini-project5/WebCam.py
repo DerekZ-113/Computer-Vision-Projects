@@ -247,10 +247,18 @@ def main():
         fps_text, prev_time, frame_count = calculate_fps(frame_count + 1, prev_time)
         if fps_text is not None:
             fps = fps_text
-        cv2.putText(frame, f"FPS: {fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+        display_frame = frame.copy()
+        cv2.putText(display_frame, f"FPS: {fps:.2f}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(display_frame, "Press: 'q' to quit", (10, 110), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+
+        if (capturing):
+            cv2.putText(display_frame, "Capturing... Press: 'a' to stop", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        else:
+            cv2.putText(display_frame, "Press: 's' to start", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         # Display the frame
-        cv2.imshow("Webcam Feed", frame)
+        cv2.imshow("Webcam Feed", display_frame)
         key = cv2.waitKey(1) & 0xFF
 
         # Start capturing frames when 's' is pressed
