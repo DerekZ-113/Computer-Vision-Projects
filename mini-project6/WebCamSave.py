@@ -1,3 +1,9 @@
+# USAGE: python WebCamSave.py -f video_file_name -o out_video.avi
+# USAGE: python3 WebCamSave.py -f lane_test1.mp4 -o out_lane_test1.avi
+# USAGE: python3 WebCamSave.py -f lane_test2.mp4 -o out_lane_test2.avi
+# USAGE: python3 WebCamSave.py -f lane_test3.mp4 -o out_lane_test3.avi
+
+
 # import the necessary packages
 import cv2
 import numpy as np
@@ -21,7 +27,7 @@ else:
 time.sleep(2.0)
 
 # Get the default resolutions
-width = int(vs.get(3))
+width  = int(vs.get(3))
 height = int(vs.get(4))
 
 # Define the codec and create a VideoWriter object
@@ -29,45 +35,61 @@ out_filename = args.out
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter(out_filename, fourcc, 20.0, (width, height), True)
 
-# Function to apply a color filter to isolate white and yellow lane lines
 def color_filter(image):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+    # 白色滤波范围
+    lower_white = np.array([0, 0, 200])
+    upper_white = np.array([180, 25, 255])
+    mask_white = cv2.inRange(hsv, lower_white, upper_white)
 
-    # Define range for white color in HSV
-    white_lower = np.array([0, 0, 200])
-    white_upper = np.array([180, 25, 255])
-
-    # Define range for yellow color in HSV
-    yellow_lower = np.array([18, 94, 140])
-    yellow_upper = np.array([48, 255, 255])
-
-    # Create masks for white and yellow colors
-    white_mask = cv2.inRange(hsv, white_lower, white_upper)
-    yellow_mask = cv2.inRange(hsv, yellow_lower, yellow_upper)
-
-    # Combine both masks
-    combined_mask = cv2.bitwise_or(white_mask, yellow_mask)
-
-    filtered_image = cv2.bitwise_and(image, image, mask=combined_mask)
+    filtered_image = cv2.bitwise_and(image, image, mask=mask_white)
     return filtered_image
 
-# Define the region of interest (ROI) function
 def region_of_interest(image):
-    mask = np.zeros_like(image)
     height, width = image.shape
-    polygon = np.array([[(0, height), (width, height), (int(width * 0.5), int(height * 0.6))]])
+    mask = np.zeros_like(image)
+    polygon = np.array([[(0, height), (width, height), (width // 2, int(height * 0.6))]])
     cv2.fillPoly(mask, polygon, 255)
     masked_image = cv2.bitwise_and(image, mask)
     return masked_image
 
-# Function to display lane lines on the frame
-def display_lines(frame, lines):
-    line_image = np.zeros_like(frame)
+def average_slope_intercept(image, lines):
+    left_fit = []
+    right_fit = []
     if lines is not None:
         for line in lines:
             x1, y1, x2, y2 = line[0]
-            cv2.line(line_image, (x1, y1), (x2, y2), (0, 0, 255), 5)
+            slope, intercept = np.polyfit((x1, x2), (y1, y2), 1)
+            if slope < -0.3:  # 左侧车道线阈值
+                left_fit.append((slope, intercept))
+            elif slope > 0.3:  # 右侧车道线阈值
+                right_fit.append((slope, intercept))
+
+    left_line = make_line_coordinates(image, np.mean(left_fit, axis=0) if left_fit else None)
+    right_line = make_line_coordinates(image, np.mean(right_fit, axis=0) if right_fit else None)
+    return left_line, right_line
+
+def make_line_coordinates(image, line_parameters):
+    if line_parameters is None:
+        return None
+    slope, intercept = line_parameters
+    y1 = image.shape[0]
+    y2 = int(y1 * 0.6)
+    x1 = int((y1 - intercept) / slope)
+    x2 = int((y2 - intercept) / slope)
+    return [[x1, y1, x2, y2]]
+
+
+def display_lines(image, lines):
+    line_image = np.zeros_like(image)
+    if lines:
+        for line in lines:
+            if line is not None:
+                x1, y1, x2, y2 = line[0]
+                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)  # 蓝色线条
     return line_image
+
 
 # loop over the frames from the video stream
 while True:
@@ -76,42 +98,43 @@ while True:
     if not ret:
         break
 
-    # Apply color filter to the frame to isolate lane colors
+    # Apply color filtering to isolate white lane lines
     filtered_image = color_filter(frame)
 
-    # Convert the filtered frame to grayscale
+    # Convert the enhanced image to grayscale
     gray = cv2.cvtColor(filtered_image, cv2.COLOR_BGR2GRAY)
 
-    # Apply Gaussian blur to the grayscale image
+    # Apply Gaussian blur to the grayscale image to reduce noise
     blurred = cv2.GaussianBlur(gray, (5, 5), 0)
 
-    # Perform Canny edge detection
+    # Perform Canny edge detection to identify edges in the image
     edges = cv2.Canny(blurred, 50, 150)
 
-    # Apply region of interest mask
+    # Apply region of interest mask to focus only on the lanes area
     cropped_edges = region_of_interest(edges)
 
-    # Perform Hough Line Transform to detect lines
+    # Perform Hough Line Transform to detect lines in the image
     lines = cv2.HoughLinesP(cropped_edges, rho=1, theta=np.pi/180, threshold=50, 
                             minLineLength=40, maxLineGap=100)
 
-    # Create a line image and add it to the original frame
-    line_image = display_lines(frame, lines)
+    # Process the detected lines to find the left and right lane lines
+    left_line, right_line = average_slope_intercept(frame, lines)
+
+    # Draw the lane lines onto a blank image
+    line_image = display_lines(frame, [left_line, right_line])
+
+    # Combine the line image with the original frame to display detected lanes
     combined_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
 
-    # Write the frame to the output video file
     if args.out:
         out.write(combined_image)
 
-    # Show the output frame
     cv2.imshow("Lane Detection", combined_image)
     key = cv2.waitKey(1) & 0xFF
 
-    # if the `q` key was pressed, break from the loop
     if key == ord("q"):
         break
 
-# Release the video capture object
 vs.release()
 out.release()
 cv2.destroyAllWindows()
