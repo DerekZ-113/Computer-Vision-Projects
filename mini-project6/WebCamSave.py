@@ -2,7 +2,7 @@
 # USAGE: python3 WebCamSave.py -f lane_test1.mp4 -o out_lane_test1.avi
 # USAGE: python3 WebCamSave.py -f lane_test2.mp4 -o out_lane_test2.avi
 # USAGE: python3 WebCamSave.py -f lane_test3.mp4 -o out_lane_test3.avi
-
+from collections import deque
 
 # import the necessary packages
 import cv2
@@ -49,31 +49,73 @@ def color_filter(image):
 def region_of_interest(image):
     height, width = image.shape
     mask = np.zeros_like(image)
-    polygon = np.array([[(0, height), (width, height), (width // 2, int(height * 0.6))]])
+    polygon = np.array([[(0, height), (width, height), (int(width * 0.4), int(height * 0.6)), (int(width * 0.6), int(height * 0.6))]])
     cv2.fillPoly(mask, polygon, 255)
     masked_image = cv2.bitwise_and(image, mask)
     return masked_image
 
-def average_slope_intercept(image, lines):
+# Buffers to store lane lines over multiple frames
+left_line_buffer = deque(maxlen=100)
+right_line_buffer = deque(maxlen=100)
+
+# Function to update the buffer with new detected line
+def add_to_buffer(buffer, lines):
+    if lines is not None:
+        for line in lines:
+            buffer.append(line)
+
+# Function to average lines over the buffer
+def average_lines(buffer):
+    if len(buffer) > 0:
+        return np.mean(buffer, axis=0).astype(int)  # Average lines
+    return None
+
+def line_filter_pipline(image, lines):
+    filtered_lines = line_length_filter(lines, min_length=50)
+    left_fit, right_fit = line_slope_filter(filtered_lines)
+
+    # Add the new detected lines to the buffers
+    add_to_buffer(left_line_buffer, left_fit)
+    add_to_buffer(right_line_buffer, right_fit)
+
+    smooth_left_line = average_lines(left_line_buffer)
+    smooth_right_line = average_lines(right_line_buffer)
+
+    return smooth_left_line, smooth_right_line
+
+
+def line_length_filter(lines, min_length = 50):
+    filtered_lines = []
+    for line in lines:
+        x1, y1, x2, y2 = line[0]
+        if abs(x1 - x2) <= 1e-6:
+            continue
+        length = np.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+        if length > min_length:
+            filtered_lines.append(line)
+    return filtered_lines
+
+
+def line_slope_filter(lines):
     left_fit = []
     right_fit = []
-    if lines is not None:
+    if lines:
         for line in lines:
             x1, y1, x2, y2 = line[0]
             slope, intercept = np.polyfit((x1, x2), (y1, y2), 1)
-            if slope < -0.3:  # 左侧车道线阈值
-                left_fit.append((slope, intercept))
-            elif slope > 0.3:  # 右侧车道线阈值
-                right_fit.append((slope, intercept))
+            if -2 < slope < -0.3:
+                left_fit.append(line)
+            elif 2 > slope > 0.3:
+                right_fit.append(line)
 
-    left_line = make_line_coordinates(image, np.mean(left_fit, axis=0) if left_fit else None)
-    right_line = make_line_coordinates(image, np.mean(right_fit, axis=0) if right_fit else None)
-    return left_line, right_line
+    return left_fit, right_fit
 
-def make_line_coordinates(image, line_parameters):
-    if line_parameters is None:
+
+def make_line_coordinates(image, line):
+    if line is None:
         return None
-    slope, intercept = line_parameters
+    x1, y1, x2, y2 = line[0]
+    slope, intercept = np.polyfit((x1, x2), (y1, y2), 1)
     y1 = image.shape[0]
     y2 = int(y1 * 0.6)
     x1 = int((y1 - intercept) / slope)
@@ -86,8 +128,8 @@ def display_lines(image, lines):
     if lines:
         for line in lines:
             if line is not None:
-                x1, y1, x2, y2 = line[0]
-                cv2.line(line_image, (x1, y1), (x2, y2), (255, 0, 0), 10)  # 蓝色线条
+                x1, y1, x2, y2 = make_line_coordinates(image, line)[0]
+                cv2.line(line_image, (x1, y1), (x2, y2), (0, 255, 0), 10)  # 蓝色线条
     return line_image
 
 
@@ -111,14 +153,17 @@ while True:
     edges = cv2.Canny(blurred, 50, 150)
 
     # Apply region of interest mask to focus only on the lanes area
-    cropped_edges = region_of_interest(edges)
+    # cropped_edges = region_of_interest(edges)
 
     # Perform Hough Line Transform to detect lines in the image
-    lines = cv2.HoughLinesP(cropped_edges, rho=1, theta=np.pi/180, threshold=50, 
-                            minLineLength=40, maxLineGap=100)
+    lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi/180, threshold=50,
+                            minLineLength=50, maxLineGap=100)
 
     # Process the detected lines to find the left and right lane lines
-    left_line, right_line = average_slope_intercept(frame, lines)
+    left_line, right_line = line_filter_pipline(frame, lines)
+
+    print(f"Left line: {left_line}")
+    print(f"Right line: {right_line}")
 
     # Draw the lane lines onto a blank image
     line_image = display_lines(frame, [left_line, right_line])
