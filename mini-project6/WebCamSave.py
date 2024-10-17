@@ -17,9 +17,6 @@ import random
 left_line_buffer = deque(maxlen=30)
 right_line_buffer = deque(maxlen=30)
 
-import cv2
-import numpy as np
-
 
 def color_filter(image):
     """
@@ -97,7 +94,7 @@ def line_filter_pipeline(image, lines):
     slope_filtered_lines = line_slope_filter(lines)
 
     # Apply RANSAC to remove outliers and get the most likely lane lines
-    ransac_filtered_lines, intersection = RANSAC(slope_filtered_lines)
+    ransac_filtered_lines,_ = RANSAC(slope_filtered_lines)
 
     # Find the best-matching left and right lane lines from the filtered lines
     left_fit, right_fit = find_best_match_line(ransac_filtered_lines)
@@ -111,11 +108,6 @@ def line_filter_pipeline(image, lines):
     smooth_right_line = average_lines(right_line_buffer)
 
     return smooth_left_line, smooth_right_line
-
-
-import cv2
-import numpy as np
-import random
 
 
 def line_slope_filter(lines):
@@ -166,7 +158,8 @@ def RANSAC(lines, distance_threshold=10, max_iterations=100):
     """
     best_inliers = []
     best_intersection = None
-
+    if len(lines) < 2:
+        return best_inliers, best_intersection
     for _ in range(max_iterations):
         # Randomly select two lines from the set of lines
         line1, line2 = random.sample(lines, 2)
@@ -207,10 +200,14 @@ def find_best_match_line(lines, slope_diff_threshold=0.15, min_dis_threshold=30)
     Returns:
         list: A list containing the best-matched left and right lane lines.
     """
+    if lines is None:
+        return [], []
+
     left_match = []
     right_match = []
 
     for line in lines:
+        print(f'Hi, {line}')
         x1, y1, x2, y2 = line
         slope = (y2 - y1) / (x2 - x1)
         if slope > 0:
@@ -239,7 +236,7 @@ def find_best_match_line(lines, slope_diff_threshold=0.15, min_dis_threshold=30)
                             line[1] - right_match_line[1] <= slope_diff_threshold and line_distance(right_match_line,
                                                                                                     line) < min_dis_threshold]
 
-    return [left_best_match, right_best_match]
+    return left_best_match, right_best_match
 
 
 def add_to_buffer(buffer, lines):
@@ -276,7 +273,7 @@ def average_lines(buffer):
     return None
 
 
-def draw_lines(image, lines):
+def draw_lines(image, left_line, right_line):
     """
     Draws the detected lane lines on the input image.
 
@@ -291,11 +288,14 @@ def draw_lines(image, lines):
         ndarray: The image with the lane lines drawn on it.
     """
     # Find the intersection of the left and right lane lines
-    intersection = line_intersection(lines[1], lines[0])
+    if left_line is not None and right_line is not None:
+        intersection = line_intersection(left_line, right_line)
 
-    # Draw each lane line on the image
-    for line in lines:
-        x1, y1, x2, y2 = make_line_coordinates(image, line, intersection)[0]
+        # Draw each lane line on the image
+        x1, y1, x2, y2 = make_line_coordinates(image, left_line, intersection)[0]
+        cv2.line(image, (x1, y1), (x2, y2), (0, 0, 255), 10)  # Red color for lane lines
+
+        x1, y1, x2, y2 = make_line_coordinates(image, right_line, intersection)[0]
         cv2.line(image, (x1, y1), (x2, y2), (0, 0, 255), 10)  # Red color for lane lines
     return image
 
@@ -506,7 +506,7 @@ def main():
             left_line, right_line = line_filter_pipeline(frame, lines)
 
             # Draw the detected lane lines on the frame
-            line_image = draw_lines(frame, [left_line, right_line])
+            line_image = draw_lines(frame, left_line, right_line)
 
             # Combine the original frame with the lane lines
             combined_image = cv2.addWeighted(frame, 0.8, line_image, 1, 1)
@@ -519,7 +519,7 @@ def main():
                 out.write(line_image)
 
             # Display text instructions on the frame
-            cv2.putText(display_image, "Lane Detection......", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            cv2.putText(display_image, "Lane Detecting......", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.putText(display_image, "Press 's' to Pause", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             cv2.putText(display_image, "Press 'q' to Quit", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             cv2.imshow("Lane Detection", display_image)
@@ -527,7 +527,7 @@ def main():
         else:
             # Display paused message when detection is paused
             display_image = line_image.copy()
-            cv2.putText(display_image, "Pausing......", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+            cv2.putText(display_image, "Paused......", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
             cv2.putText(display_image, "Press 's' to Resume", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             cv2.putText(display_image, "Press 'q' to Quit", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2)
             cv2.imshow("Lane Detection", display_image)
