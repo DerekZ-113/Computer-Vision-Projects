@@ -42,7 +42,8 @@ This project implements a **Lane Detector** using advanced image processing tech
 
 - **Controls**:
   - The program automatically starts processing frames as soon as it runs.
-  - Press `q` to quit the application and stop the lane detection.
+  - Press `s` to Pause/Resume the application and stop the lane detection.
+  - Press `q` to Quit the application and stop the lane detection.
 - **Ensure your computer has a connected webcam or provide a valid video file**. The application processes each video frame in real time, applying image enhancement techniques to improve the detection of lane lines, even in challenging lighting conditions or with dashed lines.
 
 ## Code Overview
@@ -50,9 +51,21 @@ This project implements a **Lane Detector** using advanced image processing tech
 - **`enhance_white_lines`**: Converts the image to grayscale and applies adaptive thresholding and morphological operations to enhance and connect broken dashed white lines, making them easier to detect.
 - **`color_filter`**: Filters the image to isolate the white lane lines, improving the accuracy of lane detection by reducing noise and irrelevant elements.
 - **`region_of_interest`**: Defines a polygonal region of interest to focus the detection on the area where lane lines are most likely to appear.
-- **`average_slope_intercept`**: Calculates the average slope and intercept for the left and right lane lines, allowing for the detection of smoother and more consistent lane boundaries.
+- **`line_filter_pipeline`**: This function processes detected lines by:
+   -Filtering out lines based on their slope (to remove horizontal or irrelevant lines).
+   -Applying RANSAC to remove outlier lines and select the best lane lines.
+   -Smoothing the detected lines by averaging over a buffer that stores detected lines from previous frames (helpful in real-time systems).
+- **`line_slope_filter`**: Filters out lines that are too horizontal or vertical by calculating the slope. Lines with slopes between `-0.3` and `0.3` are excluded, as they are either too horizontal or not useful for lane detection.
+- **`RANSAC`**: Applies the RANSAC algorithm to identify the best intersection of lines. It randomly selects pairs of lines, calculates their intersection, and checks how many other lines are close to this intersection (inliers). The goal is to find the lines that best converge at a common point, which can help detect lanes reliably.
+- **`find_best_match_line`**: Separates the lines into left and right lane candidates based on slope, then identifies the best matches by comparing slopes and distances between lines. It returns the left and right lanes with the most consistent slopes and minimal distances between them.
+- **`add_to_buffer`**: Adds newly detected lines to a buffer for smoothing over time. This helps maintain consistency by averaging detected lines over multiple frames.
+- **`average_lines`**: Averages the lines in the buffer to create a smooth, stable line that reduces frame-to-frame noise. This is essential in real-time applications, where lane line positions can fluctuate.
+- **`draw_lines`**: Draws the detected left and right lane lines on the input image, using the intersection point of the lanes to extend the lines accurately. The lines are drawn in red to clearly visualize lane boundaries.
 - **`make_line_coordinates`**: Generates line coordinates for the left and right lane lines based on their average slope and intercept.
-- **`display_lines`**: Draws the detected lane lines onto the video frames, showing them in real time with clear visual indicators.
+- **`make_line_coordinates`**: Generates line coordinates for the detected lane lines. It adjusts the line to extend from the bottom of the image to a point near the intersection of the left and right lanes, ensuring the lines fit within the image and follow the correct slope.
+- **`line_intersection`**: Calculates the intersection point of two lines. It checks if the lines are parallel (no intersection) and if not, computes the point where the two lines cross. This is useful for detecting where lane lines converge (e.g., vanishing point on the horizon).
+- **`line_point_distance`**: Calculates the shortest distance between a line and a point using the perpendicular distance formula. This is used to determine how close a line is to a given point, such as the intersection found in `RANSAC`.
+- **`line_distance`**: Computes the distance between two approximately parallel lines by calculating the perpendicular distance between them. This is useful when comparing two lane lines to ensure they are correctly spaced apart.
 - **`main`**:
   - Initializes the video feed and processes each frame using the lane detection pipeline.
   - Enhances the image to detect dashed lines as solid, continuous lines for improved visualization.
@@ -60,8 +73,10 @@ This project implements a **Lane Detector** using advanced image processing tech
 
 ### Demonstrating Video
 
-- Sample video in the project folder
-  - lane_test1.mp4 -> out_lane_test1.avi
-  - lane_test2.mp4 -> out_lane_test2.avi
-  - lane_test3.mp4 -> out_lane_test3.avi
+- Sample video in the GoogleDrive:
+https://drive.google.com/drive/folders/1MfBh7xroQ3lGHEUabCWor48rcw4rfypk?usp=drive_link
+
+  - lane_test1.mp4 -> out_lane_test1.avi && Sample for test1.mov
+  - lane_test2.mp4 -> out_lane_test2.avi && Sample for test2.mov
+  - lane_test3.mp4 -> out_lane_test3.avi && Sample for test3.mov
 - Optional recorded video:
