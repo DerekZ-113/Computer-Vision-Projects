@@ -70,12 +70,19 @@ This project implements a **Lane Detector** using advanced image processing tech
   - Enhances the image to detect dashed lines as solid, continuous lines for improved visualization.
   - Outputs the processed video with lane markings.
 
-### Demonstrating Video
+## Demonstrating Video
 
-- Sample video in the GoogleDrive:
-https://drive.google.com/drive/folders/1MfBh7xroQ3lGHEUabCWor48rcw4rfypk?usp=drive_link
+- **Sample videos in Google Drive:**
+  [Google Drive Link](https://drive.google.com/drive/folders/1MfBh7xroQ3lGHEUabCWor48rcw4rfypk?usp=drive_link)
 
-  - lane_test1.mp4 -> out_lane_test1.avi && Sample for test1.mov
-  - lane_test2.mp4 -> out_lane_test2.avi && Sample for test2.mov
-  - lane_test3.mp4 -> out_lane_test3.avi && Sample for test3.mov
-- Optional recorded video:
+  - `lane_test1.mp4` → `out_lane_test1.avi` & `Sample for test1.mov`
+  - `lane_test2.mp4` → `out_lane_test2.avi` & `Sample for test2.mov`
+  - `lane_test3.mp4` → `out_lane_test3.avi` & `Sample for test3.mov`
+
+- **Optional recorded video:**
+  
+  **Note:** Since testing was conducted by a single person, we recorded the road footage using a WebCam and DashCam rather than capturing real-time video.
+
+  - `real-road-1.mp4` → `out_real-road-1.avi`
+  - `real-road-2.mp4` → `out_real-road-2.avi`
+  - `real-road-3.mp4` → `out_real-road-3.avi`
