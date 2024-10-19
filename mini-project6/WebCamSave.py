@@ -334,8 +334,8 @@ def make_line_coordinates(image, line, intersection):
 
     # Set y2 as a point close to the intersection, but within the image bounds
     y2 = int(iy + h * 0.3)
-    if h * 0.6 < y2:
-        y2 = int(h * 0.6)
+    if h * 0.8 < y2:
+        y2 = int(h * 0.8)
     # Calculate x2 based on the intercept and slope
     x2 = int((y2 - intercept) / slope)
 
