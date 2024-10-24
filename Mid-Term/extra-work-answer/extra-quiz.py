@@ -223,6 +223,13 @@ def display_stitched_image(image):
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
+def save_stitched_image(image, folder_name):
+    if image is not None:
+        cv2.imwrite(f"{folder_name}.jpg", image)
+        print(f"Stitched image saved as {folder_name}.jpg")
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
 def main():
     parser = argparse.ArgumentParser(description='Stitch images into a grid.')
     parser.add_argument('-d', '--directory', type=str, required=True, help='Path to the folder containing images')
@@ -254,6 +261,8 @@ def main():
     stitched_image = stitch_grid(grid)
 
     display_stitched_image(stitched_image)
+
+    save_stitched_image(stitched_image, args.directory)
 
 if __name__ == '__main__':
     main()
