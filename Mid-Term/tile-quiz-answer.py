@@ -10,7 +10,6 @@ def read_images_from_folder(folder_path):
     images = [cv2.imread(os.path.join(folder_path, img)) for img in image_files]
     return images
 
-
 # added code
 def find_keypoints_and_match(img1, img2):
     """
@@ -153,7 +152,6 @@ def main():
     images = read_images_from_folder(args.directory)
 
     stitched_image = stitch_images(images)
-
     display_stitched_image(stitched_image)
 
     save_stitched_image(stitched_image, args.directory)
