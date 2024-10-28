@@ -2,6 +2,12 @@
 dataset/
 *.jpeg
 
+dataset1/
+*.jpeg
+
+data0/
+*.jpeg
+
 # Ignore virtual environment
 venv/
 myvenv/
@@ -14,3 +20,5 @@ __pycache__/
 *.pth
 *.h5
 
+split.py
+image.py
