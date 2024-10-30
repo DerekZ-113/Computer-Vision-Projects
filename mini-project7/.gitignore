@@ -17,8 +17,6 @@ __pycache__/
 *.py[cod]
 
 # Ignore model files if needed
-*.pth
+# *.pth
 *.h5
 
-split.py
-image.py
