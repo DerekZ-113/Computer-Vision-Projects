@@ -80,7 +80,9 @@ python3 train.py --img 640 --batch 16 --epochs 50 --data '/content/dataset/data.
 This script:
 
 - Loads the dataset and trains the model using YOLOv5.
-- Saves the best-performing model for use in real-time detection.
+- Saves the **best-performing model** for use in real-time detection.
+  - **Best-performing model**: [Google Drive Link](https://drive.google.com/file/d/1OPoVkFF0BkEX9Pzo8m_63EJEaTDaZvNQ/view?usp=sharing)
+  - last model: [Google Drive Link](https://drive.google.com/file/d/1EMDylD01IysLNmWavwj7J86Qn8ihr-NS/view?usp=sharing)
 
 ### 2. Run the Traffic Sign Detector
 
