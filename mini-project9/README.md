@@ -86,8 +86,11 @@ This script:
 Model Evaluation:
 
 - Detect Accuracy: 
-  - Daytime: 90% 
-  - NightTime: 60% (lack of green light data)
+  - model confidence rate detected by val.py in YOLOv5
+    - [Google Drive Link](https://drive.google.com/drive/folders/1yXWYW1b4gqxzJCeNOCr_QZdZFi7bTjZD?usp=sharing)
+  - Our thoughts
+   - Daytime: 90% 
+   - NightTime: 60% (lack of green light data)
 - Speed: 
   - For normal case is fast 
   - For edge case like dark and angle is bad is slower than nomal
