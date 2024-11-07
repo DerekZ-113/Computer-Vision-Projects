@@ -1,10 +1,12 @@
 # USAGE: python3 WebCamSave.py -f test.mp4 -o out_video.avi
+
+# import the necessary packages
 import cv2
 import numpy as np
 import time
 import os
 import argparse
-import torch
+import torch  # 新增，用于加载 YOLOv5 模型
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description="Video file path or camera input")
@@ -13,9 +15,10 @@ parser.add_argument("-o", "--out", type=str, help="Output video file name")
 
 args = parser.parse_args()
 
-model_path = '../Downloads/best.pt'
-model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
-model.conf = 0.4
+# 加载 YOLOv5 模型
+model = torch.hub.load('ultralytics/yolov5', 'custom',
+                       path='/Users/ziyang/Downloads/best.pt')  # 替换为 best.pt 的实际路径
+model.conf = 0.4  # 设置置信度阈值，可根据需要调整
 
 # Check if the file argument is provided, otherwise use the camera
 if args.file:
@@ -26,7 +29,7 @@ else:
 time.sleep(2.0)
 
 # Get the default resolutions
-width  = int(vs.get(3))
+width = int(vs.get(3))
 height = int(vs.get(4))
 
 # Define the codec and create a VideoWriter object
@@ -49,7 +52,7 @@ while True:
     for *box, conf, cls in detections:
         x1, y1, x2, y2 = map(int, box)
         label = f"{model.names[int(cls)]} ({conf * 100:.1f}%)"
-        
+
         # Draw bounding box and label
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
