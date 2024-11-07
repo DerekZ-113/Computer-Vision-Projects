@@ -49,9 +49,9 @@ And setup yolov5 environment by running the following code.
   - We collected images for the following traffic sign categories from roboflow and manually changed the label:
     - Stop Sign (source: https://universe.roboflow.com/germantrafficsigns-zl3mn/stop-sign-zn1kw)
     - Traffic Signal (source: https://universe.roboflow.com/dat-uetjh/traffic-lights-lk2pn)
-  - The dataset includes **478 training images** and **80 validation images**, with an equal number of images for each class.
+  - The dataset includes **478 training images** and **80 validation images**, with an equal number of images for each class. [Google Drive Link](https://drive.google.com/file/d/1BBV0IBQMYGVgzXych-46r6Pmu3uuWLtb/view?usp=sharing)
 - Finetune Dataset (manually collect)
-  - From the first dataset, the model can't detect night traffic night, so we collect more data for this
+  - From the first dataset, the model can't detect **night traffic night**, so we collect more data for this
     - source: [Google Drive Link](https://drive.google.com/drive/folders/1dwD1eU915KV71vdCAyP4SNgcF4uqavj9?usp=sharing)
   - The dataset includes **113 training images** and **10 validation images** and **6 test images**, with an equal number of images for each class.
 
@@ -81,13 +81,16 @@ This script:
 - Loads the dataset and trains the model using YOLOv5.
 - Saves the best-performing model for use in real-time detection.
 
-## Best Model (download link)
+## Version1 Best Model (download link)
+[Google Drive Link](https://drive.google.com/file/d/1BBV0IBQMYGVgzXych-46r6Pmu3uuWLtb/view?usp=sharing)
+
+## Updated Best Model (download link)
 [Google Drive Link](https://drive.google.com/file/d/1jZelWu5Ti8nAgi_RGXHweRAlaOucB5K8/view?usp=drive_link)
 Model Evaluation:
 
 - Detect Accuracy: 
   - Daytime: 90% 
-  - NightTime: 60% (lack of green light data)
+  - **NightTime**: 60% (lack of green light data)
 - Speed: 
   - For normal case is fast 
   - For edge case like dark and angle is bad is slower than nomal
@@ -111,6 +114,11 @@ python3 WebCamSave.py -f test.mp4 -o output_video.avi
 
 Sample videos showing the detector in action are uploaded onto the repository or with Google Drive:
 
-- **Recorded test video (**[Google Drive Link](https://drive.google.com/drive/folders/1eZgsuifq_x8-8hUAbe8NKM1LbDlg1hna?usp=drive_link)**):**
+- **Recorded test video (**[Google Drive Link](https://drive.google.com/file/d/16h6gAzWkbrao9sI6SV5htQ4BfZkJP_f0/view?usp=sharing)**):**
+  - `mv1.mp4` → `output_video1.avi`
+  - `mv2.mp4` → `output_video2.avi`
+  - `mv3.mp4` → `output_video3.avi`
+
+- **Night Videos**:**Recorded test video (**[Google Drive Link](https://drive.google.com/drive/folders/1eZgsuifq_x8-8hUAbe8NKM1LbDlg1hna?usp=drive_link)**):**
   - `mv1.mp4` → `mv1(1).mp4`
   - `night_video.mp4` → `night_video(1).mp4`
