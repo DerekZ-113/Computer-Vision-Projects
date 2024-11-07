@@ -61,7 +61,7 @@ def get_target_resolution(width1, height1, width2, height2):
     return target_width, target_height
 
 
-# Method to capture and resize frames from both cameras
+# Method to capture and resize.py frames from both cameras
 def capture_and_resize_frames(cap1, cap2, target_width, target_height):
     ret1, frame1 = cap1.read()
     ret2, frame2 = cap2.read()
@@ -128,7 +128,7 @@ def main():
     fps = 0
 
     while True:
-        # Capture and resize frames
+        # Capture and resize.py frames
         frame1, frame2 = capture_and_resize_frames(cap1, cap2, target_width, target_height)
         if frame1 is None or frame2 is None:
             break

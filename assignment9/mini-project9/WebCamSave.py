@@ -1,19 +1,10 @@
-<<<<<<< HEAD
 # USAGE: python3 WebCamSave.py -f test.mp4 -o out_video.avi
-=======
-# USAGE: python WebCamSave.py -f video_file_name -o out_video.avi
->>>>>>> 264c0aee379942409f89df2faef512f7c776ce6d
-
-# import the necessary packages
 import cv2
 import numpy as np
 import time
 import os
 import argparse
-<<<<<<< HEAD
-import torch  # 新增，用于加载 YOLOv5 模型
-=======
->>>>>>> 264c0aee379942409f89df2faef512f7c776ce6d
+import torch
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description="Video file path or camera input")
@@ -22,13 +13,10 @@ parser.add_argument("-o", "--out", type=str, help="Output video file name")
 
 args = parser.parse_args()
 
-<<<<<<< HEAD
-# 加载 YOLOv5 模型
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='/content/yolov5/runs/train/traffic_detection//weights/best.pt')  # 替换为 best.pt 的实际路径
-model.conf = 0.4  # 设置置信度阈值，可根据需要调整
+model_path = '../Downloads/best.pt'
+model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path)
+model.conf = 0.4
 
-=======
->>>>>>> 264c0aee379942409f89df2faef512f7c776ce6d
 # Check if the file argument is provided, otherwise use the camera
 if args.file:
     vs = cv2.VideoCapture(args.file)
@@ -46,20 +34,13 @@ out_filename = args.out
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
 out = cv2.VideoWriter(out_filename, fourcc, 20.0, (width, height), True)
 
-<<<<<<< HEAD
 # Loop over the frames from the video stream
 while True:
     # Grab the frame from video stream
-=======
-# loop over the frames from the video stream
-while True:
-    # grab the frame from video stream
->>>>>>> 264c0aee379942409f89df2faef512f7c776ce6d
     ret, frame = vs.read()
     if not ret:
         break
 
-<<<<<<< HEAD
     # YOLOv5 model detection
     results = model(frame)
     detections = results.xyxy[0].cpu().numpy()  # Get detection results
@@ -75,29 +56,8 @@ while True:
 
     # Write the frame to the output video file
     out.write(frame)
-=======
-    # Add your code HERE: For example,
-    #cv2.putText(frame, "Lane Detection", (int(width/4), int(height/2)),
-    #            cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
-
-    # Write the frame to the output video file
-    if args.out:
-        out.write(frame)
-
-    # show the output frame
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1) & 0xFF
-
-    # if the `q` key was pressed, break from the loop
-    if key == ord("q"):
-        break
->>>>>>> 264c0aee379942409f89df2faef512f7c776ce6d
 
 # Release the video capture object
 vs.release()
 out.release()
-<<<<<<< HEAD
 print(f"Output video saved as {out_filename}")
-=======
-cv2.destroyAllWindows()
->>>>>>> 264c0aee379942409f89df2faef512f7c776ce6d
