@@ -52,7 +52,7 @@ The trained model weights and architecture are saved and available on Google Dri
 
 ---
 
-## Execution [NOTE: the code has never directly run on Laptop, instead Colab was used for the assignment, therefore there might exist name/parameter mismatch]
+## Execution [NOTE: the training code has never directly run on Laptop, instead Colab was used for the assignment, therefore there might exist name/parameter mismatch]
 
 To run the code, clone this repository and execute `rcnn-basic.py`,`rcnn-light.py`, `WebCamSave_rcnn.py`. Ensure all dependencies are installed as specified in the `requirements.txt` file.
 
