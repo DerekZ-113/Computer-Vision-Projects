@@ -23,7 +23,6 @@ We are a group of dedicated students working together on these projects. Here is
 - Yiling Hu
 - Ziyang Liang
 
-
 ## Project List
 
 Below is a list of the projects in this repository. Each project has its own directory with detailed instructions.
@@ -36,4 +35,4 @@ Below is a list of the projects in this repository. Each project has its own dir
 6. **Midterm:** [Mid-Term project: Image stitching](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/Mid-Term)
 7. **Project 6:** [Mini-Project9: Live detector (YOLOv5)](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project9)
 8. **Project 7:** [Assignment9 (rcnn & YOLOv3)](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/Assignment9)
-9. **Project 8:** Mini-Project10: Customized U-Net
+9. **Project 8:** [Mini-Project10: Customized U-Net](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project10)
