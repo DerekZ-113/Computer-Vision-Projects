@@ -42,6 +42,7 @@ In the Google Colab environment:
 
 ## Model Architecture
 
+You can find the training code in the same [Google Drive root directory](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I) named **SecondBatchCode.ipynb**.
 The model is a U-Net architecture with:
 
 - **Input Shape**: 512x512x3
