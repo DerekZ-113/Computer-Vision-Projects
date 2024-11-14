@@ -1,4 +1,4 @@
-# Mini-Project 9: Traffic Sign Detection
+# Mini-Project 9: Stop Sign and Traffic Sign Detection
 
 ## Team Members
 

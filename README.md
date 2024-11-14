@@ -23,11 +23,16 @@ We are a group of dedicated students working together on these projects. Here is
 - Yiling Hu
 - Ziyang Liang
 
-
 ## Project List
 
 Below is a list of the projects in this repository. Each project has its own directory with detailed instructions.
 
-1. **Project 1:** Mini-Project3: Webcam Transformation
-
-> Navigate to each project's directory for more detailed documentation.
+1. **Project 1:** [Mini-Project3: Webcam Transformation](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project3)
+2. **Project 2:** [Mini-Project4: Sewing Machine](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project4)
+3. **Project 3:** [Mini-Project5: Panoramic Photo](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project5)
+4. **Project 4:** [Mini-Project6: Lane Detector](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project6)
+5. **Project 5:** [Mini-Project7: Live classifier (CNN)](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project7)
+6. **Midterm:** [Mid-Term project: Image stitching](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/Mid-Term)
+7. **Project 6:** [Mini-Project9: Live detector (YOLOv5)](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project9)
+8. **Project 7:** [Assignment9 (rcnn & YOLOv3)](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/Assignment9)
+9. **Project 8:** [Mini-Project10: Customized U-Net](https://github.khoury.northeastern.edu/aliciazyc/CS5330_F24_Group4/tree/main/mini-project10)
