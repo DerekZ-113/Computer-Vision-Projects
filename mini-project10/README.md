@@ -107,7 +107,7 @@ print(f'Test IoU: {test_iou}')
 ## Visualization of Results
 
 The code provides functions to visualize the original images, ground truth masks, and predicted masks.
-[Results of visualization](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I)
+[Results of visualization](https://drive.google.com/drive/folders/1qRVz70ixvsj76Pp2Gwv982A6ZFzYPG-o)
 
 1. **Display Sample Images and Masks**: Shows random samples of images and masks before training.
 2. **Plot Training Metrics**: Plots training and validation loss and IoU across epochs.
@@ -119,7 +119,7 @@ To display predictions with IoU:
 display_predictions(model, X_test, y_test)
 ```
 
-## Files in Repository: [Google Drive Link](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I)
+## Files in Repository: [Google Drive Link](https://drive.google.com/drive/folders/1qRVz70ixvsj76Pp2Gwv982A6ZFzYPG-o)
 
 - `cityscape_dataset.zip`: Compressed dataset for training and testing.
 - `unet_best_model.keras`: Saved model with the best performance.
@@ -135,7 +135,7 @@ The model achieved the following results after **15 epochs** of training:
 - **Validation IoU**: 0.8149
 - **Validation Loss**: 0.2107
 
-In [Google Drive Link](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I), you can find the screenshots for the result, and log.
+In [Google Drive Link](https://drive.google.com/drive/folders/1qRVz70ixvsj76Pp2Gwv982A6ZFzYPG-o), you can find the screenshots for the result, and log.
 
 ## Improvements
 
