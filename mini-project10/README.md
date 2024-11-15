@@ -25,28 +25,29 @@ pip install tensorflow opencv-python-headless numpy matplotlib scikit-learn
 
 ### Dataset Preparation
 
-The dataset is expected to be a zip file named `city_dataset.zip` stored in the [Google Drive root directory](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I).
+The dataset is expected to be a zip file named `cityscape_dataset.zip` stored in the [Google Drive root directory](https://drive.google.com/drive/folders/1qRVz70ixvsj76Pp2Gwv982A6ZFzYPG-o).
 
-- **Dataset Location**: `city_dataset.zip` (downloaded and stored locally after unzipping).
+- **Dataset Location**: `cityscape_dataset.zip` (downloaded and stored locally after unzipping).
+- **Dataset Size**: 1391 images with corresponding ground truth masks.
 - **Paths in Code**:
-  - Images: `leftImg8bit_trainvaltest/train`
-  - Masks: `gtFine_trainvaltest/train`
+  - Images: `leftImg8bit/train`
+  - Masks: `gtFine/train`
 
 ### Unzip the Dataset
 
 In the Google Colab environment:
 
 ```python
-!unzip -oq '/content/drive/MyDrive/city_dataset.zip' -d '/content/'
+!unzip -oq '/content/drive/MyDrive/cityscape_dataset.zip' -d '/content/'
 ```
 
 ## Model Architecture
 
-You can find the training code in the same [Google Drive root directory](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I) named **SecondBatchCode.ipynb**.
+You can find the training code in the same [Google Drive root directory](https://drive.google.com/drive/folders/1qRVz70ixvsj76Pp2Gwv982A6ZFzYPG-o) named **unet_training.py**.
 The model is a U-Net architecture with:
 
-- **Input Shape**: 512x512x3
-- **Batch Size**: 4 (optimized for the input size)
+- **Input Shape**: 256x256x3
+- **Batch Size**: 8 (optimized for the input size)
 - **Optimizer**: Adam with learning rate of 1e-4
 - **Loss Function**: Combination of Binary Cross-Entropy and Dice Loss
 - **Metrics**: IoU (Intersection over Union) and Accuracy
@@ -59,7 +60,7 @@ The U-Net includes data augmentation parameters:
 ## Training and Validation
 
 - **Training/Validation Split**: The data is split into 80% for training and 20% for validation.
-- **Batch Size**: 4 (to manage memory with 512x512 image inputs).
+- **Batch Size**: 8 (to manage memory with 256x256 image inputs).
 - **Epochs**: Trained for 50 epochs with early stopping and learning rate reduction on plateau.
 
 ### Augmentation Parameters
@@ -81,7 +82,7 @@ history = model.fit(
     train_generator,
     steps_per_epoch=len(X_train) // batch_size,
     validation_data=(X_val, y_val),
-    epochs=50,
+    epochs=15,
     callbacks=callbacks
 )
 ```
@@ -120,12 +121,28 @@ display_predictions(model, X_test, y_test)
 
 ## Files in Repository: [Google Drive Link](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I)
 
-- `city_dataset.zip`: Compressed dataset for training and testing.
+- `cityscape_dataset.zip`: Compressed dataset for training and testing.
 - `unet_best_model.keras`: Saved model with the best performance.
-- `second_batch_code.rtf`: The Python script containing all steps for loading data, training, and evaluating the model.
+- `unet_training.py`: The Python script containing all steps for loading data, training, and evaluating the model.
 
-## Improvements made
+## Results 
 
-[Google Drive Link](https://drive.google.com/drive/folders/180VYhzA12a1hKtNVoln0vDxOjmY0rgKj)
+The model achieved the following results after **15 epochs** of training:
+- **Accuracy**: 0.9494
+- **IoU Metric**: 0.8698
+- **Loss**: 0.1159
+- **Validation Accuracy**: 0.9303
+- **Validation IoU**: 0.8149
+- **Validation Loss**: 0.2107
 
-We were actually training the models for four times (reaching limitaion) expecting to find a better result. However, due to some problems related to input, the results of third and fourth batches got better testing accuracy with totally black ground truth and IoU as 0. Thus, we are handing in the second batch.
+In [Google Drive Link](https://drive.google.com/drive/folders/15-kAGWv6w-dQvaKmbjGABgWOC9qtyD_I), you can find the screenshots for the result, and log.
+
+## Improvements
+
+- **Hyperparameter Tuning**: While the current model achieved notable results with an accuracy of 0.9494 and an IoU of 0.8698, further optimization of hyperparameters (e.g., learning rate, batch size, and augmentation settings) could enhance these metrics. Additional experimentation with learning rate schedules or adaptive learning rate techniques may yield improved convergence.
+  
+- **Extended Training on the Full Dataset**: The model was trained on a subset of the Cityscapes dataset for faster training. Expanding the training set to the full dataset could improve generalization, likely boosting both validation accuracy and IoU.
+
+- **Increased Epochs**: The model was trained for 15 epochs for demonstration purposes. Increasing the number of epochs, while monitoring for overfitting, could allow the model to learn more nuanced features and potentially improve accuracy and IoU on validation data.
+
+- **Fine-Tuning Learning Rate**: Reducing the learning rate as training progresses, particularly after reaching initial plateaus, may help the model converge better and achieve a higher final accuracy. Implementing a more gradual learning rate decay, such as cosine annealing, could be beneficial.
