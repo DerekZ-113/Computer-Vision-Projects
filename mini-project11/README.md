@@ -13,94 +13,264 @@
 
 This project demonstrates a Python-based real-time object detection and tracking application using:
 
-- **YOLOv5**: For object detection.
+- **YOLOv8**: For object detection.
 - **Lucas-Kanade Optical Flow**: For tracking detected objects across video frames.
 
-The goal is to detect objects using a pre-trained YOLOv5 model and track their movements using optical flow, enabling continuous monitoring of selected regions.
+The goal is to detect objects using a pre-trained YOLOv8 model and track their movements using optical flow, enabling continuous monitoring of selected objects.
 
 ---
 
 ## **Features**
 
 1. **Object Detection**:
-   - Utilizes the pre-trained YOLOv5 model for detecting objects in a video stream or file.
+   - Utilizes the pre-trained YOLOv8 model for detecting objects in a video stream.
    - Draws bounding boxes with class labels and confidence scores for detected objects.
-2. **Manual ROI Selection**:
-   - Users can manually select a region of interest (ROI) for tracking specific objects.
-3. **Optical Flow Tracking**:
-   - Tracks the manually selected ROI across frames using Lucas-Kanade optical flow.
-4. **Video Input Options**:
-   - Supports real-time webcam input or pre-recorded video files.
-5. **Video Output**:
-   - Saves the processed video with detection and tracking annotations.
+
+2. **Automatic Object Tracking**:
+   - Automatically tracks detected objects across frames using Lucas-Kanade optical flow.
+   - Supports tracking of multiple objects simultaneously.
+
+3. **Tracking Controls**:
+   - **Press `t`** to start tracking.
+   - **Press `t` again** to stop tracking and clear the screen.
+   - **Press `c`** to clear the current tracking data and trajectories without stopping tracking.
+
+4. **Performance Monitoring**:
+   - Displays Frames Per Second (**FPS**) on the top-left corner of the video feed.
+
+5. **Video Input**:
+   - Supports real-time webcam input.
 
 ---
 
 ## **Setup Instructions**
 
-1.  **Install Required Libraries**:
-    Install the dependencies listed below:
-        ```bash
-        pip install ultralytics opencv-python argparse numpy
-        ```
-2.  **Download Pre-trained YOLOv5 Model**:
-    We are downloading the `yolov5s.pt` model due to device limitation. But you can switch to all these models if available.
-        ```python
-        # yolov5s.t: (fastest, least accurate)
-        # yolov5m.pt: Medium
-        # yolov5l.pt: Large
-        # yolov5x.pt: Extra-large (most accurate, slowest)
-        yolo_model = YOLO('yolov5s.pt')
-        ```
-3.  **Run the Script**:
-    Execute the script with the following command:
-        ```bash
-        python3 webcam.py -f <video-file> -o <output-video>
-        #python3 webcam.py -f test.mp4 -o output_video.avi
-        ```
+1. **Install Required Libraries**:
 
-        - Replace `<video-file>` with the path to a video file (optional).
-        - Replace `<output-video>` with the desired output video file name (optional).
-        - If no `f` option is provided, the webcam will be used as the input.
+   Install the dependencies listed below:
+
+   ```bash
+   pip install ultralytics opencv-python scipy numpy
+   ```
+
+   - **Note**: Ensure you have **Python 3.6** or higher.
+
+2. **Download Pre-trained YOLOv8 Model**:
+
+   The script uses the `yolov8n.pt` model for object detection:
+
+   ```python
+   yolo_model = YOLO('yolov8n.pt')
+   ```
+
+   - You can switch to other YOLOv8 models if desired:
+
+     - `yolov8n.pt`: Nano (fastest, least accurate)
+     - `yolov8s.pt`: Small (~20 fps)
+     - `yolov8m.pt`: Medium (~15 fps)
+     - `yolov8l.pt`: Large
+     - `yolov8x.pt`: Extra-large (most accurate, slowest)
+
+   - **Note**: Using larger models may reduce performance (lower FPS).
+
+3. **Run the Script**:
+
+   Execute the script with the following command:
+
+   ```bash
+   python3 live_opticalflow.py
+   ```
+
+   - The script uses the default webcam as input.
 
 ---
 
 ## **Usage Instructions**
 
-1. **Object Detection**:
-   - The script continuously detects objects and displays bounding boxes with labels.
-2. **Manual ROI Selection**:
-   - Press `s` to manually select a region of interest (ROI) for tracking.
-   - Use the mouse to draw a bounding box around the object.
-3. **Optical Flow Tracking**:
-   - Once an ROI is selected, the Lucas-Kanade optical flow algorithm will track the object.
-   - Tracks are displayed as green lines.
-4. **Exit**:
-   - Press `q` to quit the application.
+1. **Start the Application**:
+
+   - Run the script to start the video feed and object detection.
+
+2. **Tracking Controls**:
+
+   - **Press `t`** to **toggle tracking** on or off.
+     - When tracking is enabled, the script will detect and track objects automatically.
+     - When tracking is disabled, all tracking data and trajectories are cleared.
+   - **Press `c`** to **clear the current tracking data and trajectories** without disabling tracking.
+
+3. **Object Detection and Tracking**:
+
+   - When tracking is enabled:
+     - The script detects objects and tracks them across frames.
+     - Bounding boxes are drawn around detected objects with labels.
+     - Tracking trajectories are displayed as green lines.
+
+4. **Performance Monitoring**:
+
+   - The **FPS (Frames Per Second)** is displayed on the top-left corner of the video feed.
+
+5. **Exit**:
+
+   - **Press `q`** to quit the application.
+
+---
+
+## **Additional Information**
+
+- **Classes to Track**:
+
+  - By default, the script is set to track the **'person'** class.
+  - You can modify the `classes_to_track` variable in the script to track other classes:
+
+    ```python
+    classes_to_track = ['person', 'car']
+    ```
+
+  - **Available Classes**: Refer to the YOLOv8 model's documentation for a list of detectable classes.
+
+- **Model Performance**:
+
+  - The script is optimized for better performance by:
+
+    - Using a smaller YOLOv8 model (`yolov8n.pt`).
+    - Resizing frames to a lower resolution (e.g., 640x480).
+    - Running YOLO detection every **3 frames** to reduce computational load.
+    - Adjusting optical flow parameters for faster computation.
+
+  - **Hardware Acceleration**:
+
+    - For improved performance, especially when using larger models, run the script on a machine with a compatible **GPU**.
+    - Ensure that PyTorch and other libraries are configured to utilize GPU acceleration.
 
 ---
 
 ## **Example Commands**
 
-1. **Webcam Input**:
+1. **Run with Webcam Input**:
 
    ```bash
-   python webcam.py -o output_video.avi
-   ```
-
-2. **Video File Input**:
-
-   ```bash
-   python3 webcam.py -f input_video.mp4 -o output_video.avi
+   python3 live_opticalflow.py
    ```
 
 ---
 
-## **Test Output**
+## **Script Overview**
 
-- **Real-Time Display**:
-  - The application shows the video feed with detected objects and tracking annotations.
-  - [Google drive link](#)
-- **Processed Video**:
-  - If the `o` flag is provided, the processed video will be saved with detection and tracking annotations.
-  - [Google drive link](#)
+Below is a brief overview of the key components of the `live_opticalflow.py` script:
+
+- **Import Statements**:
+
+  ```python
+  import cv2
+  import numpy as np
+  from ultralytics import YOLO
+  from scipy.optimize import linear_sum_assignment
+  import time
+  ```
+
+- **Initialization**:
+
+  - Load the YOLOv8 model.
+  - Initialize variables for object tracking, optical flow parameters, and FPS calculation.
+
+- **Main Loop**:
+
+  - Capture frames from the webcam.
+  - Resize frames for performance optimization.
+  - Convert frames to grayscale for optical flow computation.
+  - Handle tracking based on the `tracking_enabled` state.
+    - When tracking is enabled:
+      - Run YOLO detection every 3 frames.
+      - Perform data association and track management.
+      - Apply Lucas-Kanade optical flow to track objects between detections.
+      - Draw bounding boxes, labels, and trajectories.
+    - When tracking is disabled:
+      - Display the video feed without tracking annotations.
+  - Calculate and display FPS.
+  - Handle key presses for user controls (`t`, `c`, `q`).
+
+- **Key Features**:
+
+  - **Toggle Tracking**: Press `t` to start or stop tracking.
+  - **Clear Tracking Data**: Press `c` to clear tracking data without stopping tracking.
+  - **Exit**: Press `q` to quit the application.
+
+---
+
+## **Dependencies and Requirements**
+
+- **Python Version**: Ensure you are using **Python 3.6** or higher.
+
+- **Required Libraries**:
+
+  - `ultralytics`: For YOLOv8 object detection.
+  - `opencv-python`: For video capture and image processing.
+  - `numpy`: For numerical operations.
+  - `scipy`: For the linear assignment problem in data association.
+  - `time`: For FPS calculation.
+
+- **Installation Command**:
+
+  ```bash
+  pip install ultralytics opencv-python scipy numpy
+  ```
+
+---
+
+## **Customization**
+
+- **Adjust Detection Frequency**:
+
+  - Modify how often YOLO detection runs by changing the frame interval:
+
+    ```python
+    if frame_count % 3 == 0:
+        # Run YOLO detection
+    ```
+
+  - Increase the number for less frequent detection (improves FPS but may reduce tracking accuracy).
+
+- **Change Frame Resolution**:
+
+  - Adjust the `desired_width` and `desired_height` variables to change the processing resolution:
+
+    ```python
+    desired_width = 640
+    desired_height = 480
+    ```
+
+  - Lower resolutions can improve performance at the cost of detection accuracy.
+
+- **Optical Flow Parameters**:
+
+  - Tweak `lk_params` to optimize the optical flow algorithm for your specific use case:
+
+    ```python
+    lk_params = dict(
+        winSize=(15, 15),
+        maxLevel=2,
+        criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03),
+    )
+    ```
+
+---
+
+## **Troubleshooting**
+
+- **Low FPS**:
+
+  - Use a smaller YOLO model (`yolov8n.pt`).
+  - Reduce the frame resolution.
+  - Ensure that your system has sufficient resources or consider using a machine with a dedicated GPU.
+
+- **Module Not Found Errors**:
+
+  - Verify that all required libraries are installed.
+  - Use `pip list` to check installed packages and their versions.
+
+- **Camera Access Issues**:
+
+  - Ensure that your webcam is properly connected and not being used by another application.
+  - Check permissions if running on an operating system that restricts camera access.
+
+---
