@@ -16,7 +16,7 @@ This project demonstrates a Python-based real-time object detection and tracking
 - **YOLOv8**: For object detection.
 - **Lucas-Kanade Optical Flow**: For tracking detected objects across video frames.
 
-The goal is to detect objects using a pre-trained YOLOv8 model and track their movements using optical flow, enabling continuous monitoring of selected objects.
+The goal is to detect all objects in the frame using a pre-trained YOLOv8 model and track the movements of specific classes (e.g., 'person') using optical flow, enabling continuous monitoring of selected objects.
 
 ---
 
@@ -24,10 +24,10 @@ The goal is to detect objects using a pre-trained YOLOv8 model and track their m
 
 1. **Object Detection**:
    - Utilizes the pre-trained YOLOv8 model for detecting objects in a video stream.
-   - Draws bounding boxes with class labels and confidence scores for detected objects.
+   - **Detects and displays bounding boxes for all objects** in the frame with class labels and confidence scores.
 
-2. **Automatic Object Tracking**:
-   - Automatically tracks detected objects across frames using Lucas-Kanade optical flow.
+2. **Selective Object Tracking**:
+   - **Tracks only specified classes** (e.g., 'person') across frames using Lucas-Kanade optical flow.
    - Supports tracking of multiple objects simultaneously.
 
 3. **Tracking Controls**:
@@ -78,7 +78,7 @@ The goal is to detect objects using a pre-trained YOLOv8 model and track their m
    Execute the script with the following command:
 
    ```bash
-   python3 live_opticalflow.py
+   python3 webcam.py
    ```
 
    - The script uses the default webcam as input.
@@ -94,16 +94,18 @@ The goal is to detect objects using a pre-trained YOLOv8 model and track their m
 2. **Tracking Controls**:
 
    - **Press `t`** to **toggle tracking** on or off.
-     - When tracking is enabled, the script will detect and track objects automatically.
+     - When tracking is enabled, the script will detect and track specified objects automatically.
      - When tracking is disabled, all tracking data and trajectories are cleared.
    - **Press `c`** to **clear the current tracking data and trajectories** without disabling tracking.
 
 3. **Object Detection and Tracking**:
 
-   - When tracking is enabled:
-     - The script detects objects and tracks them across frames.
-     - Bounding boxes are drawn around detected objects with labels.
+   - **Detection**:
+     - The script detects **all objects** in the frame and displays bounding boxes with labels.
+   - **Tracking**:
+     - When tracking is enabled, the script tracks only the specified classes (e.g., 'person').
      - Tracking trajectories are displayed as green lines.
+     - Bounding boxes and labels for tracked objects are highlighted differently to distinguish them from other detections.
 
 4. **Performance Monitoring**:
 
@@ -128,6 +130,18 @@ The goal is to detect objects using a pre-trained YOLOv8 model and track their m
 
   - **Available Classes**: Refer to the YOLOv8 model's documentation for a list of detectable classes.
 
+- **Visualization Details**:
+
+  - **Detection Bounding Boxes**:
+    - **Color**: Blue
+    - **Description**: Drawn for all detected objects not being tracked.
+  - **Tracking Bounding Boxes**:
+    - **Color**: Yellow
+    - **Description**: Drawn for objects being tracked (specified classes).
+  - **Tracking Trajectories**:
+    - **Color**: Green lines
+    - **Description**: Shows the movement path of tracked objects.
+
 - **Model Performance**:
 
   - The script is optimized for better performance by:
@@ -149,14 +163,14 @@ The goal is to detect objects using a pre-trained YOLOv8 model and track their m
 1. **Run with Webcam Input**:
 
    ```bash
-   python3 live_opticalflow.py
+   python3 webcam.py
    ```
 
 ---
 
 ## **Script Overview**
 
-Below is a brief overview of the key components of the `live_opticalflow.py` script:
+Below is a brief overview of the key components of the `webcam.py` script:
 
 - **Import Statements**:
 
@@ -191,6 +205,8 @@ Below is a brief overview of the key components of the `live_opticalflow.py` scr
 
 - **Key Features**:
 
+  - **Detect All Objects**: The script detects all objects and displays bounding boxes and labels for them.
+  - **Selective Tracking**: Only specified classes are tracked, reducing computational load.
   - **Toggle Tracking**: Press `t` to start or stop tracking.
   - **Clear Tracking Data**: Press `c` to clear tracking data without stopping tracking.
   - **Exit**: Press `q` to quit the application.
@@ -253,6 +269,15 @@ Below is a brief overview of the key components of the `live_opticalflow.py` scr
     )
     ```
 
+- **Adjust Confidence Threshold**:
+
+  - Modify the confidence threshold for detections to filter out low-confidence detections:
+
+    ```python
+    if confidence > 0.5:
+        # Process detection
+    ```
+
 ---
 
 ## **Troubleshooting**
@@ -273,4 +298,12 @@ Below is a brief overview of the key components of the `live_opticalflow.py` scr
   - Ensure that your webcam is properly connected and not being used by another application.
   - Check permissions if running on an operating system that restricts camera access.
 
+- **Bounding Boxes Flashing**:
+
+  - The script addresses flashing by storing and consistently displaying the last detections.
+  - If you notice flashing, ensure that the code storing and drawing `last_detections` is correctly implemented.
+
 ---
+
+## **Video Demo**
+[Google Drive](https://drive.google.com/drive/folders/10ehLSJHL3uk9QPhVTZnkJCsxqea7fR6Z?usp=share_link)
