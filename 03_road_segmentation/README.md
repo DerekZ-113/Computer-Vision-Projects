@@ -1,13 +1,4 @@
-# Mini-Project 10: Customized U-Net
-
-## Team Members
-
-- **Derek Zhang**
-- **Yichi Zhang**
-- **Yiling Hu**
-- **Ziyang Liang**
-
----
+# 03 Road Segmentation
 
 ## Project Overview
 

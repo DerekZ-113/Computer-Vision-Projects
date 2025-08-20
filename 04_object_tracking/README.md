@@ -1,13 +1,4 @@
-# Mini-Project 11 Follow Everything
-
-## Team Members
-
-- **Derek Zhang**
-- **Yichi Zhang**
-- **Yiling Hu**
-- **Ziyang Liang**
-
----
+# 04 Object Tracking
 
 ## **Project Overview**
 

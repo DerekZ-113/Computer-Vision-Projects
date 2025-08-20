@@ -1,11 +1,4 @@
-# Mini-Project6: Lane Detector
-
-### Project Group 4
-
-- Derek Zhang
-- Yichi Zhang
-- Yiling Hu
-- Ziyang Liang
+# 01 Lane Detection
 
 ## Project Description
 

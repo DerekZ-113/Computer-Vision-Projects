@@ -1,13 +1,4 @@
-# Mini-Project 9: Stop Sign and Traffic Sign Detection
-
-## Team Members
-
-- **Derek Zhang**
-- **Yichi Zhang**
-- **Yiling Hu**
-- **Ziyang Liang**
-
----
+# 02 Traffic Sign Detection
 
 ## Project Overview
 
